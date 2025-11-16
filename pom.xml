@@ -1,0 +1,17 @@
+aiqueen-server/
+├─ pom.xml
+├─ src/main/java/com/aiqueen/Application.java
+├─ src/main/java/com/aiqueen/config/SecurityConfig.java
+├─ src/main/java/com/aiqueen/controller/AiController.java
+├─ src/main/java/com/aiqueen/controller/DonationController.java
+├─ src/main/java/com/aiqueen/controller/TwilioController.java
+├─ src/main/java/com/aiqueen/controller/CampaignController.java
+├─ src/main/java/com/aiqueen/service/AiService.java
+├─ src/main/java/com/aiqueen/service/DonationService.java
+├─ src/main/java/com/aiqueen/service/TwilioService.java
+├─ src/main/java/com/aiqueen/service/SchedulerService.java
+├─ src/main/java/com/aiqueen/model/Campaign.java
+├─ src/main/java/com/aiqueen/repo/CampaignRepository.java
+├─ src/main/resources/application.yml
+├─ Dockerfile
+└─ README.md
