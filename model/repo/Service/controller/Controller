@@ -1,0 +1,25 @@
+package com.aiqueen.controller;
+
+import com.aiqueen.service.AiService;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/ai")
+public class AiController {
+  private final AiService ai;
+  public AiController(AiService ai){ this.ai = ai; }
+
+  @PostMapping
+  public ResponseEntity<?> ask(@RequestBody Map<String,String> payload){
+    try {
+      String prompt = payload.getOrDefault("prompt","");
+      if (prompt.isBlank()) return ResponseEntity.badRequest().body(Map.of("error","missing prompt"));
+      String resp = ai.ask(prompt);
+      return ResponseEntity.ok(Map.of("ok",true,"text",resp));
+    } catch (Exception ex) {
+      return ResponseEntity.status(500).body(Map.of("ok",false,"error", ex.getMessage()));
+    }
+  }
+}
