@@ -1,0 +1,37 @@
+package com.aiqueen.service;
+
+import com.stripe.Stripe;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+@Service
+public class DonationService {
+  @Value("${stripe.secret-key:}")
+  private String stripeKey;
+
+  public void init(){ if (stripeKey != null && !stripeKey.isBlank()) Stripe.apiKey = stripeKey; }
+
+  public String createCheckout(Long cents, String currency, String desc, String baseUrl) throws Exception {
+    init();
+    if (Stripe.apiKey == null) throw new IllegalStateException("Stripe not configured");
+    SessionCreateParams params = SessionCreateParams.builder()
+      .setMode(SessionCreateParams.Mode.PAYMENT)
+      .setSuccessUrl(baseUrl + "/donation-success?session_id={CHECKOUT_SESSION_ID}")
+      .setCancelUrl(baseUrl + "/donation-cancel")
+      .addLineItem(SessionCreateParams.LineItem.builder()
+        .setQuantity(1L)
+        .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
+          .setCurrency(currency)
+          .setUnitAmount(cents)
+          .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
+            .setName(desc)
+            .build())
+          .build())
+        .build())
+      .build();
+    Session session = Session.create(params);
+    return session.getUrl();
+  }
+}
